@@ -15,13 +15,18 @@ def super_methods(request):
 
   elif request.method =='POST':
     serializer = SuperSerializer(data=request.data)
-    serializer.is_valid()
+    serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)
 
-@api_view(['GET'])
+@api_view(['GET', 'PUT'])
 def super_by_id(request,pk):
   supers = get_object_or_404(Super, pk=pk)
   if request.method == 'GET':
     serializer = SuperSerializer(supers)
+    return Response(serializer.data)
+  elif request.method =='PUT':
+    serializer = SuperSerializer(supers, data=request.data, )
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
     return Response(serializer.data)
